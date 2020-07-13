@@ -1,7 +1,6 @@
 package com.recognition.intellst.app;
 
-import com.recognition.intellst.app.ChartApplication;
-import com.recognition.intellst.recognition.FaceController;
+import com.recognition.intellst.recognition.FaceControllerImpl;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -12,39 +11,35 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StageInitializer implements ApplicationListener<ChartApplication.StageReadyEvent> {
+public class StageInitializer implements ApplicationListener<StageReadyEvent> {
 
-    @Value("${intellst.videofx.url}")
-    private Resource charResource;
+    @Value("${spring.application.ui.title} ")
     private String applicationTitle;
-
-    public StageInitializer(@Value("${spring.application.ui.title}") String applicationTitle) {
-        this.applicationTitle = applicationTitle;
-    }
+    @Value("classpath:${applicatiun.url.path}")
+    private Resource charResource;
+    @Value("${application.stylesheet.path}")
+    private String stylesheet;
 
     @Override
-    public void onApplicationEvent(ChartApplication.StageReadyEvent event) {
-
+    public void onApplicationEvent(StageReadyEvent stageReadyEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(charResource.getURL());
             BorderPane root = loader.load();
 
             Scene scene = new Scene(root, 800, 600);
-            scene.getStylesheets().add("application.css");
+            scene.getStylesheets().add(stylesheet);
 
-            Stage stage = event.getStage();
+            Stage stage = stageReadyEvent.getStage();
             stage.setScene(scene);
             stage.setTitle(applicationTitle);
             stage.show();
 
-            FaceController controller = loader.getController();
+            FaceControllerImpl controller = loader.getController();
             controller.init();
 
             stage.setOnCloseRequest((windowEvent -> controller.setClosed()));
-
         } catch (Exception e) {
             System.err.println("Error to create scene" + e);
         }
-
     }
 }
