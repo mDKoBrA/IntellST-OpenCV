@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
-            fx:controller="com.recognition.intellst.recognition.FaceControllerImpl"
+            fx:controller="com.recognition.intellst.recognition.FaceController"
             styleClass="pane">
     <center>
         <ImageView fx:id="currentFrame"/>

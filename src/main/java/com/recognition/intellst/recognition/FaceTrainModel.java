@@ -18,8 +18,10 @@ public class FaceTrainModel {
 
     @Value("${application.training.set.path}")
     private String trainingData;
+    @Value("${application.save.model.folder}")
+    private String saveFolder;
 
-    public void trainFace() throws IOException {
+    public void faceTrain() throws IOException {
         File folder = new File(trainingData);
         FaceRecognizer faceRecognizer = Face.createLBPHFaceRecognizer();
 
@@ -52,7 +54,7 @@ public class FaceTrainModel {
                 counter++;
             }
             faceRecognizer.update(images, labels);
-            faceRecognizer.save("train.yml");
+            faceRecognizer.save(saveFolder + "/train.yml");
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.recognition.intellst.app;
 
-import com.recognition.intellst.recognition.FaceControllerImpl;
+import com.recognition.intellst.recognition.FaceController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -34,7 +34,7 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
             stage.setTitle(applicationTitle);
             stage.show();
 
-            FaceControllerImpl controller = loader.getController();
+            FaceController controller = loader.getController();
             controller.init();
 
             stage.setOnCloseRequest((windowEvent -> controller.setClosed()));
