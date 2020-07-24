@@ -28,9 +28,5 @@ public class CollectData {
                     image.submat(facesArray[0]));
         }
     }
-
-    private void generateFolder(String uuid){
-
-    }
 }
 

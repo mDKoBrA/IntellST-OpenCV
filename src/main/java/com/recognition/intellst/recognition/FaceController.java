@@ -1,7 +1,6 @@
 package com.recognition.intellst.recognition;
 
-import com.recognition.intellst.utils.OpenUtils;
-import javafx.fxml.FXML;
+import com.recognition.intellst.utils.OpenCVImageUtils;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,51 +13,30 @@ import org.opencv.objdetect.Objdetect;
 import org.opencv.videoio.VideoCapture;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static org.opencv.imgproc.Imgproc.equalizeHist;
 
-@Component
+
 public class FaceController {
 
-    @FXML
+
     private Button button;
-    @FXML
+
     private ImageView currentFrame;
     private ScheduledExecutorService timer;
     private boolean cameraActive = false;
     private int absoluteFaceSize;
     private VideoCapture capture = new VideoCapture();
-    private Resource faceResource = new ClassPathResource("haarcascades/haarcascade_frontalface_alt2.xml");
-    private CascadeClassifier faceCascade = new CascadeClassifier(faceResource.getFile().getAbsolutePath());
-
-    public FaceController() throws IOException {
-    }
 
 
-    private static void setLabel(Mat im, String label, Point or, Scalar color) {
-        int fontface = Core.FONT_HERSHEY_SIMPLEX;
-        double scale = 0.8;
-        int thickness = 2;
-        int[] baseline = new int[1];
 
-        Size text = Imgproc.getTextSize(label, fontface, scale, thickness, baseline);
-        Imgproc.rectangle(im, new Point(or.x, or.y),
-                new Point(or.x + text.width, or.y - text.height - baseline[0] - baseline[0]), color,
-                Core.FILLED);
 
-        Imgproc.putText(im, label, new Point(or.x, or.y - baseline[0]), fontface, scale,
-                new Scalar(255, 255, 255), thickness);
-    }
-
-    @FXML
     public void startCamera() {
         if (!this.cameraActive) {
             int cameraId = 0;
@@ -68,10 +46,10 @@ public class FaceController {
 
                 Runnable frameGrabber = () -> {
                     Mat frame = grabFrame();
-                    OpenUtils openUtils = new OpenUtils();
+                    OpenCVImageUtils openCVImageUtils = new OpenCVImageUtils();
 
-                    Image imageToShow = openUtils.mat2Image(frame);
-                    openUtils.updateImageView(currentFrame, imageToShow);
+//                    Image imageToShow = openCVImageUtils.mat2Image(frame);
+//                    openCVImageUtils.updateImageView(currentFrame, imageToShow);
                 };
                 this.timer = Executors.newSingleThreadScheduledExecutor();
                 this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
@@ -82,7 +60,7 @@ public class FaceController {
         } else {
             this.cameraActive = false;
             this.button.setText("Start Camera");
-            this.stopAcquisition();
+            this.setClosed();
         }
     }
 
@@ -92,64 +70,13 @@ public class FaceController {
             try {
                 this.capture.read(frame);
                 if (!frame.empty()) {
-                    this.detectAndDisplay(frame);
+//                    this.detectAndDisplay(frame);
                 }
             } catch (Exception e) {
                 System.err.println("Exception during the image elaboration: " + e);
             }
         }
         return frame;
-    }
-
-    private void detectAndDisplay(Mat frame) throws IOException {
-
-        FaceRecognizer faceRecognizer = Face.createLBPHFaceRecognizer();
-        faceRecognizer.load("src/main/resources/trainedmodel/train.yml");
-
-        MatOfRect faces = new MatOfRect();
-        Mat grayFrame = new Mat();
-
-        Imgproc.cvtColor(frame, grayFrame, Imgproc.COLOR_BGR2GRAY);
-        equalizeHist(grayFrame, grayFrame);
-
-        if (this.absoluteFaceSize == 0) {
-            int height = grayFrame.rows();
-            if (Math.round(height * 0.2f) > 0) {
-                this.absoluteFaceSize = Math.round(height * 0.2f);
-            }
-        }
-        faceCascade.detectMultiScale(grayFrame, faces, 1.1, 2,
-                Objdetect.CASCADE_SCALE_IMAGE, new Size(this.absoluteFaceSize, this.absoluteFaceSize), new Size());
-
-        Rect[] facesArray = faces.toArray();
-        for (Rect rect : facesArray) {
-            int[] label = new int[1];
-            double[] confidence = new double[1];
-            faceRecognizer.predict(grayFrame.submat(rect), label, confidence);
-            String name = faceRecognizer.getLabelInfo(label[0]);
-            Scalar color = null;
-            if (confidence[0] < 50) {
-
-                color = new Scalar(255, 0, 0);
-
-                name = name + " " + new DecimalFormat("#.0").format(confidence[0]);
-            } else {
-
-                String uuid = UUID.randomUUID().toString().replace("-", "");
-//                int i;
-//                for (i = 0; i < 10; i++) {
-//                    CollectData.saveImage(frame, uuid, faceCascade);
-                    name = "Unknown";
-                    color = new Scalar(0, 0, 255);
-//                }
-
-            }
-
-            Imgproc.rectangle(frame, rect.tl(), rect.br(), color, 2);
-            setLabel(frame, name, rect.tl(), color);
-            System.out.println("Test");
-        }
-
     }
 
     public void init() {
@@ -177,6 +104,10 @@ public class FaceController {
 
     public void setClosed() {
         this.stopAcquisition();
+    }
+
+    public void startCapture(String cameraIP, boolean start){
+
     }
 }
 
