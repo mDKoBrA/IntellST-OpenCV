@@ -23,6 +23,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static org.opencv.imgproc.Imgproc.CHAIN_APPROX_NONE;
 import static org.opencv.imgproc.Imgproc.equalizeHist;
 
 @Component
@@ -61,8 +62,8 @@ public class FaceController {
     @FXML
     public void startCamera() {
         if (!this.cameraActive) {
-            int cameraId = 0;
-            this.capture.open(cameraId);
+
+            this.capture.open(0);
             if (this.capture.isOpened()) {
                 this.cameraActive = true;
 
