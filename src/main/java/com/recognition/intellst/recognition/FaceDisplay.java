@@ -6,26 +6,17 @@ import org.opencv.face.FaceRecognizer;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 import org.opencv.objdetect.Objdetect;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.UUID;
 
+import static com.recognition.intellst.recognition.RecognitionConstants.HAAR_RESOURCE;
+import static com.recognition.intellst.recognition.RecognitionConstants.TRAINED_MODEL;
 import static org.opencv.imgproc.Imgproc.equalizeHist;
 
 public class FaceDisplay {
-    private Resource faceResource = new ClassPathResource("haarcascades/haarcascade_frontalface_alt2.xml");
-    private CascadeClassifier faceCascade;
     private int absoluteFaceSize;
-
-    {
-        try {
-            faceCascade = new CascadeClassifier(faceResource.getFile().getAbsolutePath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private static void setLabel(Mat im, String label, Point or, Scalar color) {
         int fontface = Core.FONT_HERSHEY_SIMPLEX;
@@ -42,10 +33,12 @@ public class FaceDisplay {
                 new Scalar(255, 255, 255), thickness);
     }
 
-    public void detectAndDisplay(Mat frame) {
+    public void detectAndDisplay(Mat frame) throws IOException {
+
+        CascadeClassifier faceCascade = new CascadeClassifier(HAAR_RESOURCE.getFile().getAbsolutePath());
 
         FaceRecognizer faceRecognizer = Face.createLBPHFaceRecognizer();
-        faceRecognizer.load("src/main/resources/trainedmodel/train.yml");
+        faceRecognizer.load(TRAINED_MODEL);
 
         MatOfRect faces = new MatOfRect();
         Mat grayFrame = new Mat();
@@ -75,16 +68,15 @@ public class FaceDisplay {
 
                 name = name + " " + new DecimalFormat("#.0").format(confidence[0]);
             } else {
-
+//
 //                String uuid = UUID.randomUUID().toString().replace("-", "");
-//                int i;
-////                for (i = 0; i < 10; i++) {
-//                    CollectData.saveImage(frame, uuid, faceCascade);
+//                CollectData.saveImage(frame, uuid, faceCascade);
                 name = "Unknown";
                 color = new Scalar(0, 0, 255);
             }
             Imgproc.rectangle(frame, rect.tl(), rect.br(), color, 2);
             setLabel(frame, name, rect.tl(), color);
+
         }
     }
 }

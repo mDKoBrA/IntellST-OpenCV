@@ -1,40 +1,27 @@
-package com.recognition.intellst.recognition;
+package com.recognition.intellst.trash;
 
 import com.recognition.intellst.utils.OpenCVImageUtils;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import org.opencv.core.*;
-import org.opencv.face.Face;
-import org.opencv.face.FaceRecognizer;
-import org.opencv.imgproc.Imgproc;
+//import javafx.scene.control.Button;
+//import javafx.scene.image.ImageView;
+import org.opencv.core.Mat;
 import org.opencv.objdetect.CascadeClassifier;
-import org.opencv.objdetect.Objdetect;
 import org.opencv.videoio.VideoCapture;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import static org.opencv.imgproc.Imgproc.equalizeHist;
 
 
 public class FaceController {
 
 
-    private Button button;
+//    private Button button;
 
-    private ImageView currentFrame;
+//    private ImageView currentFrame;
     private ScheduledExecutorService timer;
     private boolean cameraActive = false;
     private int absoluteFaceSize;
     private VideoCapture capture = new VideoCapture();
-
-
 
 
     public void startCamera() {
@@ -53,13 +40,13 @@ public class FaceController {
                 };
                 this.timer = Executors.newSingleThreadScheduledExecutor();
                 this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
-                this.button.setText("Stop Camera");
+//                this.button.setText("Stop Camera");
             } else {
                 System.err.println("Impossible to open the camera connection...");
             }
         } else {
             this.cameraActive = false;
-            this.button.setText("Start Camera");
+//            this.button.setText("Start Camera");
             this.setClosed();
         }
     }
@@ -84,8 +71,8 @@ public class FaceController {
         new CascadeClassifier();
         this.absoluteFaceSize = 0;
 
-        currentFrame.setFitWidth(600);
-        currentFrame.setPreserveRatio(true);
+//        currentFrame.setFitWidth(600);
+//        currentFrame.setPreserveRatio(true);
     }
 
     private void stopAcquisition() {
@@ -106,7 +93,7 @@ public class FaceController {
         this.stopAcquisition();
     }
 
-    public void startCapture(String cameraIP, boolean start){
+    public void startCapture(String cameraIP, boolean start) {
 
     }
 }

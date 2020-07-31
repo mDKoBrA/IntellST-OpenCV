@@ -54,7 +54,7 @@ public class FaceTrainModel {
                 counter++;
             }
             faceRecognizer.update(images, labels);
-            faceRecognizer.save(saveFolder + "/train.yml");
+            faceRecognizer.save(saveFolder + "train.yml");
         }
     }
 }

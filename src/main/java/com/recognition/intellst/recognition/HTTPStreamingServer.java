@@ -1,10 +1,7 @@
 package com.recognition.intellst.recognition;
 
 import com.recognition.intellst.utils.OpenCVImageUtils;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.videoio.VideoCapture;
-import org.opencv.videoio.Videoio;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -15,17 +12,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class HTTPStreamingServer implements Runnable {
+    public Mat image;
+    private Socket socket;
 
-    private static void writeImage(OutputStream outputStream, Mat frame) throws IOException {
-        BufferedImage image = OpenCVImageUtils.matToBufferedImage(frame);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "jpg", baos);
-        byte[] imageBytes = baos.toByteArray();
-        outputStream.write(("Content-type: image/jpeg\r\n" +
-                "Content-Length: " + imageBytes.length + "\r\n" +
-                "\r\n").getBytes());
-        outputStream.write(imageBytes);
-        outputStream.write(("\r\n--" + "stream" + "\r\n").getBytes());
+    public HTTPStreamingServer(Mat frame) {
+        this.image = frame;
     }
 
     private static void writeHeader(OutputStream outputStream) throws IOException {
@@ -41,49 +32,36 @@ public class HTTPStreamingServer implements Runnable {
                 "--" + "stream" + "\r\n").getBytes());
     }
 
-    public static void main(String[] args) throws Exception {
-        System.load("D:\\Projects\\some\\IntellST-OpenCV\\src\\main\\resources\\lib\\" +
-                Core.NATIVE_LIBRARY_NAME + ".dll");
-        Mat mat = new Mat();
-        VideoCapture vid = new VideoCapture(0);
-        vid.set(Videoio.CAP_PROP_FRAME_WIDTH, 640);
-        vid.set(Videoio.CAP_PROP_FRAME_HEIGHT, 120);
-        vid.open(0);
-        System.out.println("Camera open");
+    public void writeImage(Mat frame) throws IOException {
+        OutputStream outputStream = socket.getOutputStream();
+        BufferedImage image = OpenCVImageUtils.matToBufferedImage(frame);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "jpg", baos);
+        byte[] imageBytes = baos.toByteArray();
+        outputStream.write(("Content-type: image/jpeg\r\n" +
+                "Content-Length: " + imageBytes.length + "\r\n" +
+                "\r\n").getBytes());
+        outputStream.write(imageBytes);
+        outputStream.write(("\r\n--" + "stream" + "\r\n").getBytes());
+    }
 
-        ServerSocket ss = new ServerSocket(8086);
-        Socket sock = ss.accept();
-        System.out.println("Socket connected");
-        writeHeader(sock.getOutputStream());
-        System.out.println("Written header");
-        sock.setKeepAlive(true);
-
-        long stime = System.currentTimeMillis();
-        int cnt = 0;
-        while (true) {
-            vid.read(mat);
-            if (!mat.empty()) {
-                writeImage(sock.getOutputStream(), mat);
-                System.out.println("Written jpg");
-                if (cnt++ >= 100) {
-                    long stop = System.currentTimeMillis();
-                    System.out.println("Frame rate: " + (cnt * 1000 / (stop - stime)));
-                    cnt = 0;
-                    stime = stop;
-                }
-            } else {
-                System.out.println("No picture");
-            }
-
-            sock.setKeepAlive(true);
-//            sock.close();
-//            ss.close();
-        }
+    public void startStreamingServer() throws IOException {
+        ServerSocket serverSocket = new ServerSocket(8090);
+        socket = serverSocket.accept();
+        writeHeader(socket.getOutputStream());
     }
 
     @Override
     public void run() {
-
-
+        while (true) {
+            try {
+                startStreamingServer();
+                while (true) {
+                    writeImage(image);
+                }
+            } catch (Exception e) {
+                System.out.println("Problems occurred to start streaming server");
+            }
+        }
     }
 }

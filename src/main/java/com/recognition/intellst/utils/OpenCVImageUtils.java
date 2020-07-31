@@ -1,29 +1,26 @@
 package com.recognition.intellst.utils;
 
-
 import org.opencv.core.Mat;
-import org.opencv.imgproc.Imgproc;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.WritableRaster;
 
+public class OpenCVImageUtils {
 
-public final class OpenCVImageUtils {
-
-    public static BufferedImage matToBufferedImage(Mat matrix) {
-        int width = matrix.width();
-        int height = matrix.height();
-        int type = matrix.channels() != 1 ? BufferedImage.TYPE_3BYTE_BGR : BufferedImage.TYPE_BYTE_GRAY;
-
-        if (type == BufferedImage.TYPE_3BYTE_BGR) {
-            Imgproc.cvtColor(matrix, matrix, Imgproc.COLOR_BGR2RGB);
+    public static BufferedImage matToBufferedImage(Mat frame) {
+        int type = 0;
+        if (frame.channels() == 1) {
+            type = BufferedImage.TYPE_BYTE_GRAY;
+        } else if (frame.channels() == 3) {
+            type = BufferedImage.TYPE_3BYTE_BGR;
         }
-
-        byte[] data = new byte[width * height * (int) matrix.elemSize()];
-        matrix.get(0, 0, data);
-
-        BufferedImage image = new BufferedImage(width, height, type);
-        image.getRaster().setDataElements(0, 0, width, height, data);
-
+        BufferedImage image = new BufferedImage(frame.width(), frame.height(), type);
+        WritableRaster raster = image.getRaster();
+        DataBufferByte dataBuffer = (DataBufferByte) raster.getDataBuffer();
+        byte[] data = dataBuffer.getData();
+        frame.get(0, 0, data);
         return image;
     }
 }
+

@@ -1,5 +1,6 @@
 package com.recognition.intellst;
 
+import com.recognition.intellst.recognition.VideoController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -12,6 +13,9 @@ public class IntellStApplication {
         SpringApplication.run(IntellStApplication.class, args);
 
         prepareLib();
+
+        VideoController videoController = new VideoController();
+        videoController.startCamera();
     }
 }
 

@@ -5,6 +5,7 @@ import java.net.URI;
 
 public class FSProvider {
     private static FSProvider INSTANCE = new FSProvider();
+    private static String libExtension = ".jar";
 
     public static FSProvider getInstance() {
         return INSTANCE;
@@ -15,7 +16,7 @@ public class FSProvider {
         try {
             URI jarURI = getClass().getProtectionDomain().getCodeSource().getLocation().toURI();
             File fPK = new File(jarURI.getSchemeSpecificPart());
-            if (jarURI.toString().endsWith(".jar")) {
+            if (jarURI.toString().endsWith(libExtension)) {
                 File fJar = new File(jarURI.getSchemeSpecificPart());
                 fPK = new File(fJar.getAbsolutePath());
             }
@@ -31,7 +32,7 @@ public class FSProvider {
 
         File f = getCurrentPathFile();
         String p = f.getParentFile().getAbsolutePath();
-        if (f.getAbsolutePath().endsWith(".jar")) {
+        if (f.getAbsolutePath().endsWith(libExtension)) {
             ret = new File(p);
         } else {
             ret = f;

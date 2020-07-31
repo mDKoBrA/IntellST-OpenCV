@@ -6,10 +6,12 @@ import org.opencv.core.Rect;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
+import org.springframework.beans.factory.annotation.Value;
 
 public class CollectData {
 
-    public static String path = "src/main/resources/training/";
+    @Value("${application.training.set.path}")
+    public static String path;
     private static int sample = 0;
 
     public static void saveImage(Mat image, String uuid, CascadeClassifier faceCascade) {
