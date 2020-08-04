@@ -1,5 +1,6 @@
 package com.recognition.intellst.recognition;
 
+import lombok.Setter;
 import org.opencv.core.*;
 import org.opencv.face.Face;
 import org.opencv.face.FaceRecognizer;
@@ -9,14 +10,17 @@ import org.opencv.objdetect.Objdetect;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.UUID;
 
+import static com.recognition.intellst.recognition.CollectData.uuid;
 import static com.recognition.intellst.recognition.RecognitionConstants.HAAR_RESOURCE;
 import static com.recognition.intellst.recognition.RecognitionConstants.TRAINED_MODEL;
 import static org.opencv.imgproc.Imgproc.equalizeHist;
 
 public class FaceDisplay {
-    private int absoluteFaceSize;
+
+    @Setter
+    public static Thread threadImage;
+    private static int absoluteFaceSize;
 
     private static void setLabel(Mat im, String label, Point or, Scalar color) {
         int fontface = Core.FONT_HERSHEY_SIMPLEX;
@@ -33,8 +37,9 @@ public class FaceDisplay {
                 new Scalar(255, 255, 255), thickness);
     }
 
-    public void detectAndDisplay(Mat frame) throws IOException {
+    public static void detectAndDisplay(Mat frame) throws IOException {
 
+        CollectData collectData = new CollectData();
         CascadeClassifier faceCascade = new CascadeClassifier(HAAR_RESOURCE.getFile().getAbsolutePath());
 
         FaceRecognizer faceRecognizer = Face.createLBPHFaceRecognizer();
@@ -49,34 +54,40 @@ public class FaceDisplay {
         if (absoluteFaceSize == 0) {
             int height = grayFrame.rows();
             if (Math.round(height * 0.2f) > 0) {
-                this.absoluteFaceSize = Math.round(height * 0.2f);
+                absoluteFaceSize = Math.round(height * 0.2f);
             }
         }
         faceCascade.detectMultiScale(grayFrame, faces, 1.1, 2,
-                Objdetect.CASCADE_SCALE_IMAGE, new Size(this.absoluteFaceSize, this.absoluteFaceSize), new Size());
+                Objdetect.CASCADE_SCALE_IMAGE, new Size(absoluteFaceSize, absoluteFaceSize), new Size());
 
         Rect[] facesArray = faces.toArray();
         for (Rect rect : facesArray) {
             int[] label = new int[1];
             double[] confidence = new double[1];
             faceRecognizer.predict(grayFrame.submat(rect), label, confidence);
-            String name = faceRecognizer.getLabelInfo(label[0]);
+            StringBuilder name = new StringBuilder(faceRecognizer.getLabelInfo(label[0]));
             Scalar color;
+
             if (confidence[0] < 50) {
 
                 color = new Scalar(255, 0, 0);
+                name.append(" ").append(new DecimalFormat("#.0").format(confidence[0]));
 
-                name = name + " " + new DecimalFormat("#.0").format(confidence[0]);
             } else {
-//
-//                String uuid = UUID.randomUUID().toString().replace("-", "");
-//                CollectData.saveImage(frame, uuid, faceCascade);
-                name = "Unknown";
+
+                Runnable collect = new CollectData();
+                threadImage = new Thread(collect);
+                threadImage.start();
+                setThreadImage(threadImage);
+
+                collectData.imageData();
+
+                name = new StringBuilder(uuid);
                 color = new Scalar(0, 0, 255);
             }
-            Imgproc.rectangle(frame, rect.tl(), rect.br(), color, 2);
-            setLabel(frame, name, rect.tl(), color);
 
+            Imgproc.rectangle(frame, rect.tl(), rect.br(), color, 2);
+            setLabel(frame, name.toString(), rect.tl(), color);
         }
     }
 }

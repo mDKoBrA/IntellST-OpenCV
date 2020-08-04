@@ -6,15 +6,22 @@ import org.opencv.core.Rect;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
-import org.springframework.beans.factory.annotation.Value;
 
-public class CollectData {
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
-    @Value("${application.training.set.path}")
+import static com.recognition.intellst.recognition.RecognitionConstants.HAAR_RESOURCE;
+
+public class CollectData implements Runnable {
+
+    public static String uuid;
     public static String path;
     private static int sample = 0;
+//    public Mat savedImages;
 
-    public static void saveImage(Mat image, String uuid, CascadeClassifier faceCascade) {
+    public static void saveImage(Mat image) throws IOException {
+        CascadeClassifier faceCascade = new CascadeClassifier(HAAR_RESOURCE.getFile().getAbsolutePath());
         MatOfRect faces = new MatOfRect();
         Mat grayFrame = new Mat();
 
@@ -26,9 +33,21 @@ public class CollectData {
         if (facesArray.length >= 1) {
             sample++;
             System.out.println("image: " + sample);
-            Imgcodecs.imwrite( path + "2" + "-" + uuid + "_" + (sample) + ".png",
+            Imgcodecs.imwrite(path + "/" + "2" + "-" + uuid + "_" + (sample) + ".png",
                     image.submat(facesArray[0]));
         }
+    }
+
+    public void imageData() throws IOException {
+        uuid = UUID.randomUUID().toString().replace("-", "");
+        File file = new File("src/main/resources/training/" + uuid);
+        file.mkdir();
+        path = file.getCanonicalPath();
+    }
+
+    @Override
+    public void run() {
+
     }
 }
 
