@@ -18,7 +18,6 @@ public class CollectData implements Runnable {
     public static String uuid;
     public static String path;
     private static int sample = 0;
-//    public Mat savedImages;
 
     public static void saveImage(Mat image) throws IOException {
         CascadeClassifier faceCascade = new CascadeClassifier(HAAR_RESOURCE.getFile().getAbsolutePath());
@@ -47,7 +46,16 @@ public class CollectData implements Runnable {
 
     @Override
     public void run() {
-
+        while (!Thread.currentThread().isInterrupted()) {
+            try {
+                Thread.sleep(4000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Thread.currentThread().interrupt();
+            System.out.println(Thread.currentThread());
+            return;
+        }
     }
 }
 

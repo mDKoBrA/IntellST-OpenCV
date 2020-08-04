@@ -4,6 +4,8 @@ import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
 
+import java.io.IOException;
+
 import static com.recognition.intellst.recognition.CollectData.saveImage;
 import static com.recognition.intellst.recognition.RecognitionConstants.VIDEO_HEIGHT;
 import static com.recognition.intellst.recognition.RecognitionConstants.VIDEO_WIDTH;
@@ -28,7 +30,10 @@ public class VideoController {
                 videoCapture.read(frame);
                 if (!frame.empty()) {
 //                    httpStreamingServer.image =
+//                                        if (FaceDisplay.threadImage == null) {
+
                     grabFrame();
+
                 }
             }
         }
@@ -44,17 +49,21 @@ public class VideoController {
                     if (FaceDisplay.threadImage == null) {
                         FaceDisplay.detectAndDisplay(frame);
                     } else {
-                        if (!FaceDisplay.threadImage.isAlive())
+                        if (FaceDisplay.threadImage.isAlive()) {
                             saveImage(frame);
 //                            name = new StringBuilder(uuid);
 //                            color = new Scalar(0, 0, 255);
+                        } else {
+                            FaceDisplay.detectAndDisplay(frame);
+                        }
                     }
                 }
-            } catch (Exception e) {
-                System.out.println("trash");
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            System.gc();
         }
-        System.gc();
     }
 }
 
