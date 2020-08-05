@@ -17,12 +17,12 @@ import java.util.Objects;
 public class FaceTrainModel {
 
     @Value("${application.training.set.path}")
-    private String trainingData;
+    private static String trainingData;
     @Value("${application.save.model.folder}")
-    private String saveFolder;
+    private static String saveFolder;
 
     public void faceTrain() throws IOException {
-        File folder = new File(trainingData);
+        File folder = new File("src/main/resources/training/");
         FaceRecognizer faceRecognizer = Face.createLBPHFaceRecognizer();
 
         File[] files = folder.listFiles();
@@ -54,7 +54,7 @@ public class FaceTrainModel {
                 counter++;
             }
             faceRecognizer.update(images, labels);
-            faceRecognizer.save(saveFolder + "train.yml");
+            faceRecognizer.save("src/main/resources/trainedmodel" + "/train.yml");
         }
     }
 }

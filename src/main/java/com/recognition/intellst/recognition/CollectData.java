@@ -1,5 +1,6 @@
 package com.recognition.intellst.recognition;
 
+import lombok.SneakyThrows;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
 import org.opencv.core.Rect;
@@ -20,6 +21,7 @@ public class CollectData implements Runnable {
     public static String uuid;
     public static String path;
     private static int sample = 0;
+    private static int labelSet = 0;
 
     public static void saveImage(Mat image) throws IOException {
         CascadeClassifier faceCascade = new CascadeClassifier(HAAR_RESOURCE.getFile().getAbsolutePath());
@@ -30,11 +32,12 @@ public class CollectData implements Runnable {
 
         faceCascade.detectMultiScale(grayFrame, faces);
 
+
         Rect[] facesArray = faces.toArray();
         if (facesArray.length >= 1) {
             sample++;
             System.out.println("image: " + sample);
-            Imgcodecs.imwrite(path + "/" + "2" + "-" + uuid + "_" + (sample) + ".png",
+            Imgcodecs.imwrite(path + "/" + labelSet + "-" + uuid + "_" + (sample) + ".png",
                     image.submat(facesArray[0]));
         }
     }
@@ -44,8 +47,10 @@ public class CollectData implements Runnable {
         File file = new File("src/main/resources/training/" + uuid);
         file.mkdir();
         path = file.getCanonicalPath();
+        labelSet++;
     }
 
+    @SneakyThrows
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
@@ -55,18 +60,11 @@ public class CollectData implements Runnable {
                 e.printStackTrace();
             }
             Thread.currentThread().interrupt();
-            if(threadImage.isAlive()) {
+            if (threadImage.isAlive()) {
+                FaceTrainModel faceTrainModel = new FaceTrainModel();
+                faceTrainModel.faceTrain();
                 threadImage = null;
-//                FaceTrainModel faceTrainModel = new FaceTrainModel();
-//                try {
-//                    faceTrainModel.faceTrain();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-
-                System.out.println(Thread.currentThread());
             }
-            return;
         }
     }
 }
