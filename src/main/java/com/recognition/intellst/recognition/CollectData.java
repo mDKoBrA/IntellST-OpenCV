@@ -36,7 +36,6 @@ public class CollectData implements Runnable {
         Rect[] facesArray = faces.toArray();
         if (facesArray.length >= 1) {
             sample++;
-            System.out.println("image: " + sample);
             Imgcodecs.imwrite(path + "/" + labelSet + "-" + uuid + "_" + (sample) + ".png",
                     image.submat(facesArray[0]));
         }
@@ -63,6 +62,7 @@ public class CollectData implements Runnable {
             if (threadImage.isAlive()) {
                 FaceTrainModel faceTrainModel = new FaceTrainModel();
                 faceTrainModel.faceTrain();
+                sample = 0;
                 threadImage = null;
             }
         }
