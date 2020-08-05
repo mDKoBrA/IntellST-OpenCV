@@ -22,24 +22,21 @@ public class VideoController {
 
 
         Mat frame = new Mat();
-//        HTTPStreamingServer httpStreamingServer = new HTTPStreamingServer(frame);
-//        new Thread(httpStreamingServer).start();
+        HTTPStreamingServer httpStreamingServer = new HTTPStreamingServer(frame);
+        new Thread(httpStreamingServer).start();
 
         while (true) {
             if (videoCapture.isOpened()) {
                 videoCapture.read(frame);
                 if (!frame.empty()) {
-//                    httpStreamingServer.image =
-//                                        if (FaceDisplay.threadImage == null) {
-
-                    grabFrame();
+                    httpStreamingServer.image = grabFrame();
 
                 }
             }
         }
     }
 
-    private static void grabFrame() {
+    private static Mat grabFrame() {
         Mat frame = new Mat();
 
         if (videoCapture.isOpened()) {
@@ -51,8 +48,6 @@ public class VideoController {
                     } else {
                         if (FaceDisplay.threadImage.isAlive()) {
                             saveImage(frame);
-//                            name = new StringBuilder(uuid);
-//                            color = new Scalar(0, 0, 255);
                         } else {
                             FaceDisplay.detectAndDisplay(frame);
                         }
@@ -64,6 +59,7 @@ public class VideoController {
             }
             System.gc();
         }
+        return frame;
     }
 }
 

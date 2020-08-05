@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+import static com.recognition.intellst.recognition.FaceDisplay.threadImage;
+import static com.recognition.intellst.recognition.RecognitionConstants.CAPTURE_IMAGE_TIME;
 import static com.recognition.intellst.recognition.RecognitionConstants.HAAR_RESOURCE;
 
 public class CollectData implements Runnable {
@@ -48,12 +50,22 @@ public class CollectData implements Runnable {
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
             try {
-                Thread.sleep(4000);
+                Thread.sleep(CAPTURE_IMAGE_TIME);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             Thread.currentThread().interrupt();
-            System.out.println(Thread.currentThread());
+            if(threadImage.isAlive()) {
+                threadImage = null;
+//                FaceTrainModel faceTrainModel = new FaceTrainModel();
+//                try {
+//                    faceTrainModel.faceTrain();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+
+                System.out.println(Thread.currentThread());
+            }
             return;
         }
     }
