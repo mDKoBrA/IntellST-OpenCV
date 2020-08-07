@@ -1,6 +1,5 @@
 package com.recognition.intellst;
 
-import com.recognition.intellst.recognition.VideoController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

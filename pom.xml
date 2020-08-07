@@ -92,12 +92,6 @@
             <version>${swagger.version}</version>
         </dependency>
 
-        <!--    HIKVISION Camera-->
-        <dependency>
-            <groupId>com.hikvision.ezviz</groupId>
-            <artifactId>ezviz-sdk</artifactId>
-            <version>4.8.3</version>
-        </dependency>
     </dependencies>
 </project>
 

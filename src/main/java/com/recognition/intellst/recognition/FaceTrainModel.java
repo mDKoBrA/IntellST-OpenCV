@@ -4,6 +4,7 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.face.Face;
 import org.opencv.face.FaceRecognizer;
+import org.opencv.face.LBPHFaceRecognizer;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +24,7 @@ public class FaceTrainModel {
 
     public void faceTrain() throws IOException {
         File folder = new File("src/main/resources/training/");
-        FaceRecognizer faceRecognizer = Face.createLBPHFaceRecognizer();
+        FaceRecognizer faceRecognizer = LBPHFaceRecognizer.create();
 
         File[] files = folder.listFiles();
 

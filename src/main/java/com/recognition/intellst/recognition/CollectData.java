@@ -36,6 +36,7 @@ public class CollectData implements Runnable {
         Rect[] facesArray = faces.toArray();
         if (facesArray.length >= 1) {
             sample++;
+            System.out.println("Image:" + sample);
             Imgcodecs.imwrite(path + "/" + labelSet + "-" + uuid + "_" + (sample) + ".png",
                     image.submat(facesArray[0]));
         }
