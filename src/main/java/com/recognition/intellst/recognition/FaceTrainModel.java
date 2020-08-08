@@ -22,7 +22,7 @@ public class FaceTrainModel {
     private static String saveFolder;
 
     public void faceTrain() throws IOException {
-        File folder = new File(trainingData);
+        File folder = new File("src/main/resources/training/");
         FaceRecognizer faceRecognizer = LBPHFaceRecognizer.create();
 
         File[] files = folder.listFiles();
@@ -54,7 +54,7 @@ public class FaceTrainModel {
                 counter++;
             }
             faceRecognizer.update(images, labels);
-            faceRecognizer.save(saveFolder + "/train.yml");
+            faceRecognizer.save("src/main/resources/trainedmodel" + "/train.yml");
         }
     }
 }

@@ -56,6 +56,8 @@ public class FaceDisplay {
 
             if (confidence[0] < 50) {
 
+                System.out.println(name);
+
                 name.append(" ").append(new DecimalFormat("#.0").format(confidence[0]));
 
             } else {
