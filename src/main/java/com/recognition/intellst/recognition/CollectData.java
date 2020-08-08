@@ -21,7 +21,7 @@ public class CollectData implements Runnable {
     public static String uuid;
     public static String path;
     private static int sample = 0;
-    private static int labelSet = 0;
+    private static int labelSet;
 
     public static void saveImage(Mat image) throws IOException {
         CascadeClassifier faceCascade = new CascadeClassifier(HAAR_RESOURCE.getFile().getAbsolutePath());

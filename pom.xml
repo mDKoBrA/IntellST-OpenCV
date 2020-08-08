@@ -92,6 +92,14 @@
             <version>${swagger.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.recognition</groupId>
+            <artifactId>lib</artifactId>
+            <version>4.40</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/opencv-440.jar</systemPath>
+        </dependency>
+
     </dependencies>
 </project>
 

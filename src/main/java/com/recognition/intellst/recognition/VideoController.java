@@ -17,7 +17,7 @@ public class VideoController {
 
     public static void startCamera() {
         videoCapture = new VideoCapture();
-        videoCapture.open(0, Videoio.CAP_ANY);
+        videoCapture.open("rtsp://admin:159852753fcim@169.254.87.110:554/Streaming/Channels/1", Videoio.CAP_ANY);
         videoCapture.set(Videoio.CAP_PROP_FRAME_WIDTH, VIDEO_WIDTH);
         videoCapture.set(Videoio.CAP_PROP_FRAME_HEIGHT, VIDEO_HEIGHT);
         videoCapture.set(Videoio.CAP_PROP_FPS, 60);

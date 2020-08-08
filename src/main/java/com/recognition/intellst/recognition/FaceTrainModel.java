@@ -2,7 +2,6 @@ package com.recognition.intellst.recognition;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.face.Face;
 import org.opencv.face.FaceRecognizer;
 import org.opencv.face.LBPHFaceRecognizer;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -23,7 +22,7 @@ public class FaceTrainModel {
     private static String saveFolder;
 
     public void faceTrain() throws IOException {
-        File folder = new File("src/main/resources/training/");
+        File folder = new File(trainingData);
         FaceRecognizer faceRecognizer = LBPHFaceRecognizer.create();
 
         File[] files = folder.listFiles();
@@ -55,7 +54,7 @@ public class FaceTrainModel {
                 counter++;
             }
             faceRecognizer.update(images, labels);
-            faceRecognizer.save("src/main/resources/trainedmodel" + "/train.yml");
+            faceRecognizer.save(saveFolder + "/train.yml");
         }
     }
 }

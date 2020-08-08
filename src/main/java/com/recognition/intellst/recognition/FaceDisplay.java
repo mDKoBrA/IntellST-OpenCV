@@ -5,7 +5,6 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
 import org.opencv.core.Rect;
 import org.opencv.core.Size;
-import org.opencv.face.Face;
 import org.opencv.face.FaceRecognizer;
 import org.opencv.face.LBPHFaceRecognizer;
 import org.opencv.imgproc.Imgproc;
