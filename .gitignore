@@ -31,4 +31,5 @@ build/
 .vscode/
 
 training/*
-/main/resources/training/**
+src/main/resources/training/**
+src/main/resources/training/*
