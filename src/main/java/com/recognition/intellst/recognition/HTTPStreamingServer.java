@@ -46,7 +46,7 @@ public class HTTPStreamingServer implements Runnable {
     }
 
     public void startStreamingServer() throws IOException {
-        ServerSocket serverSocket = new ServerSocket(8090);
+        ServerSocket serverSocket = new ServerSocket(8085);
         socket = serverSocket.accept();
         writeHeader(socket.getOutputStream());
     }

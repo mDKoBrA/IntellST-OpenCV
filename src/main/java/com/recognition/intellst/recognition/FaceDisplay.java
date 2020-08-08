@@ -4,6 +4,7 @@ import lombok.Setter;
 import org.opencv.core.*;
 import org.opencv.face.Face;
 import org.opencv.face.FaceRecognizer;
+import org.opencv.face.LBPHFaceRecognizer;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 import org.opencv.objdetect.Objdetect;
@@ -14,6 +15,7 @@ import java.text.DecimalFormat;
 import static com.recognition.intellst.recognition.CollectData.uuid;
 import static com.recognition.intellst.recognition.RecognitionConstants.HAAR_RESOURCE;
 import static com.recognition.intellst.recognition.RecognitionConstants.TRAINED_MODEL;
+import static org.opencv.imgproc.Imgproc.FONT_HERSHEY_SIMPLEX;
 import static org.opencv.imgproc.Imgproc.equalizeHist;
 
 public class FaceDisplay {
@@ -23,7 +25,7 @@ public class FaceDisplay {
     private static int absoluteFaceSize;
 
     private static void setLabel(Mat im, String label, Point or, Scalar color) {
-        int fontface = Core.FONT_HERSHEY_SIMPLEX;
+        int fontface = FONT_HERSHEY_SIMPLEX;
         double scale = 0.8;
         int thickness = 2;
         int[] baseline = new int[1];
@@ -42,8 +44,8 @@ public class FaceDisplay {
         CollectData collectData = new CollectData();
         CascadeClassifier faceCascade = new CascadeClassifier(HAAR_RESOURCE.getFile().getAbsolutePath());
 
-        FaceRecognizer faceRecognizer = Face.createLBPHFaceRecognizer();
-        faceRecognizer.load(TRAINED_MODEL);
+        FaceRecognizer faceRecognizer = LBPHFaceRecognizer.create();
+        faceRecognizer.read(TRAINED_MODEL);
 
         MatOfRect faces = new MatOfRect();
         Mat grayFrame = new Mat();

@@ -15,10 +15,10 @@ public class VideoController {
 
     public static void startCamera() {
         videoCapture = new VideoCapture();
-        videoCapture.open(0);
-        videoCapture.set(Videoio.CV_CAP_PROP_FRAME_WIDTH, VIDEO_WIDTH);
-        videoCapture.set(Videoio.CV_CAP_PROP_FRAME_HEIGHT, VIDEO_HEIGHT);
-        videoCapture.set(Videoio.CAP_PROP_FPS, 60);
+        videoCapture.open(0, Videoio.CAP_ANY);
+        videoCapture.set(Videoio.CAP_PROP_FRAME_WIDTH, VIDEO_WIDTH);
+        videoCapture.set(Videoio.CAP_PROP_FRAME_HEIGHT, VIDEO_HEIGHT);
+        videoCapture.set(Videoio.CAP_PROP_FPS, 30);
 
 
         Mat frame = new Mat();
