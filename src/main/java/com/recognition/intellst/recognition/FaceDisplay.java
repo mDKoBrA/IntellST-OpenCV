@@ -1,25 +1,18 @@
-package com.recognition.intellst.recognition;
-
-import org.opencv.core.*;
-import org.opencv.face.Face;
-import org.opencv.face.FaceRecognizer;
-import org.opencv.face.LBPHFaceRecognizer;
-import org.opencv.imgproc.Imgproc;
-import org.opencv.objdetect.CascadeClassifier;
-import org.opencv.objdetect.Objdetect;
-import org.opencv.videoio.VideoCapture;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-
-import java.io.IOException;
-import java.text.DecimalFormat;
-
-import static org.opencv.face.Face.createLBPHFaceRecognizer;
-import static org.opencv.imgproc.Imgproc.equalizeHist;
-
-public class FaceDisplay {
-
-}
+//package com.recognition.intellst.recognition;
+//
+//import org.opencv.core.*;
+//import org.opencv.imgproc.Imgproc;
+//import org.opencv.objdetect.CascadeClassifier;
+//import org.opencv.objdetect.Objdetect;
+//import org.springframework.core.io.ClassPathResource;
+//import org.springframework.core.io.Resource;
+//
+//import java.io.IOException;
+//
+//import static org.opencv.imgproc.Imgproc.equalizeHist;
+//
+//public class FaceDisplay {
+//
 //    private int absoluteFaceSize = 0;
 //    private Resource faceResource = new ClassPathResource("haarcascades/haarcascade_frontalface_alt2.xml");
 //
@@ -54,4 +47,5 @@ public class FaceDisplay {
 //            Imgproc.resize(croppedImage, resizeImage, size);
 //        }
 //    }
+//}
 

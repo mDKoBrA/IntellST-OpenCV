@@ -24,13 +24,9 @@ public class CollectData {
         if (facesArray.length >= 1) {
             sample++;
             System.out.println("image: " + sample);
-            Imgcodecs.imwrite( path + "2" + "-" + uuid + "_" + (sample) + ".png",
+            Imgcodecs.imwrite(path + "2" + "-" + uuid + "_" + (sample) + ".png",
                     image.submat(facesArray[0]));
         }
-    }
-
-    private void generateFolder(String uuid){
-
     }
 }
 
