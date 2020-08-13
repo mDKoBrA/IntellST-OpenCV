@@ -3,6 +3,8 @@ package com.recognition.intellst.utils;
 import com.recognition.intellst.enums.Extension;
 import org.opencv.core.Core;
 
+import java.io.File;
+
 public class OpenCVLibraryUtils {
     private static String OS = System.getProperty("os.name").toLowerCase();
 
@@ -16,6 +18,9 @@ public class OpenCVLibraryUtils {
 
     public static void prepareLib() {
         String ext;
+
+        File file = new File("src/main/resources/training" );
+        file.mkdir();
 
         if (isUnix()) {
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
