@@ -4,7 +4,6 @@ public enum Extension {
     WIN(".dll"),
     NIX(".so");
 
-
     private String label;
 
     Extension(String lib) {

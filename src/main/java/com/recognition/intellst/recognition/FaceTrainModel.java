@@ -16,11 +16,6 @@ import java.util.Objects;
 
 public class FaceTrainModel {
 
-    @Value("${application.training.set.path}")
-    private static String trainingData;
-    @Value("${application.save.model.folder}")
-    private static String saveFolder;
-
     public void faceTrain() throws IOException {
         File folder = new File("src/main/resources/training/");
         FaceRecognizer faceRecognizer = LBPHFaceRecognizer.create();
