@@ -50,12 +50,13 @@ public class VideoServiceImpl implements VideoService {
         log.info("method = startCamera");
 
         if (activeCamera) {
-            log.info("Camera is Active");
             videoCapture = new VideoCapture();
-            videoCapture.open(0, Videoio.CAP_ANY);
+            videoCapture.open(videoURL, Videoio.CAP_ANY);
             videoCapture.set(Videoio.CAP_PROP_FRAME_WIDTH, VIDEO_WIDTH);
             videoCapture.set(Videoio.CAP_PROP_FRAME_HEIGHT, VIDEO_HEIGHT);
             videoCapture.set(Videoio.CAP_PROP_FPS, 30);
+
+            log.info("VideoCapture is Active");
 
             Mat frame = new Mat();
             while (true) {

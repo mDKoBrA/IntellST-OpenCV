@@ -3,8 +3,6 @@ package com.recognition.intellst.utils;
 import com.recognition.intellst.enums.Extension;
 import org.opencv.core.Core;
 
-import java.io.File;
-
 public class OpenCVLibraryUtils {
     private static String OS = System.getProperty("os.name").toLowerCase();
 
@@ -18,17 +16,13 @@ public class OpenCVLibraryUtils {
 
     public static void prepareLib() {
         String ext;
-        String fixedLD = null;
 
         if (isUnix()) {
-            ext = Extension.NIX.getLabel();
-            File f = FSProvider.getInstance().getCurrentPathNormalizedFile();
-            fixedLD = f.getPath() + File.separator + Core.NATIVE_LIBRARY_NAME + ext;
+            System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         } else if (isWindows()) {
             ext = Extension.WIN.getLabel();
             String libPath = "D:\\Projects\\some\\IntellST-OpenCV\\src\\main\\resources\\lib\\";
-            fixedLD = libPath + Core.NATIVE_LIBRARY_NAME + ext;
+            System.load(libPath + Core.NATIVE_LIBRARY_NAME + ext);
         }
-        System.load(fixedLD);
     }
 }
